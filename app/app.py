@@ -3,11 +3,10 @@ import os
 from pdf_loader import extract_text_from_pdf
 from build_vectorstore import build_vectorstore_from_pdf
 
-# Ensure data/ folder exists
 os.makedirs("data", exist_ok=True)
 
 st.set_page_config(page_title="PDF Assistant", layout="wide")
-st.title("📚 PDF Assistant")
+st.title("PDF Assistant")
 st.write("Upload a PDF, build a knowledge base, and ask questions!")
 
 uploaded_file = st.file_uploader("Choose a PDF", type="pdf")
@@ -22,11 +21,10 @@ if uploaded_file:
     text = extract_text_from_pdf(file_path)
     st.text_area("PDF Text", value=text[:1500] + "...", height=200)
 
-    if st.button("🔨 Build Vectorstore"):
+    if st.button("Build Vectorstore"):
         build_vectorstore_from_pdf(file_path)
         st.success("Vectorstore built successfully!")
 
-# Use updated imports for LangChain v0.2+
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
@@ -61,11 +59,11 @@ def load_llm():
 
 llm = load_llm()
 
-st.subheader("🧠 Ask a Question")
+st.subheader("Ask a Question")
 query = st.text_input("Your question about the PDF:")
 
 if query:
-    st.write("🔍 Searching knowledge base...")
+    st.write("Searching knowledge base...")
     results = vectorstore.similarity_search(query, k=3)
 
     context = "\n\n---\n\n".join([f"[Chunk {res.metadata.get('chunk_index')}] {res.page_content}" for res in results])
@@ -79,11 +77,11 @@ Context:
 Question: {query}
 Answer:"""
 
-    st.write("🤖 Thinking...")
+    st.write("Thinking...")
     response = llm.invoke(prompt)
 
-    st.subheader("📌 Answer:")
+    st.subheader("Answer:")
     st.write(response)
 
-    with st.expander("📄 See Context Used"):
+    with st.expander("See Context Used"):
         st.markdown(context)

@@ -16,7 +16,7 @@ def extract_text_from_pdf(pdf_path):
         if text:
             full_text += text.strip() + "\n"
         else:
-            print(f"⚠️ No extractable text found on page {i + 1}")
+            print(f"No extractable text found on page {i + 1}")
 
     if not full_text.strip():
         raise ValueError("No extractable text found in the PDF.")
